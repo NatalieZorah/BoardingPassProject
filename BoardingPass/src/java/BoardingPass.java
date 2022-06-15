@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 
@@ -47,6 +48,7 @@ public class BoardingPass {
     }
 
     public void saveToFile(String path) throws IOException {
+        Path fileName = Path.of(path);
         String entry = String.format("%s,%s,%s,%s,%s,%s",
                 PassNumber,
                 Date,
@@ -55,7 +57,19 @@ public class BoardingPass {
                 ArrivalTime,
                 DepartureTime
         );
-        Path fileName = Path.of(path);
+        try {
+            // Create new file
+            // if it does not exist
+            File f = new File(path);
+            if (f.createNewFile()) {
+                System.out.println("New File Created : " + f.getName());
+            }else {
+                System.out.println("File Already Exists");
+            }
+        }
+        catch (Exception e) {
+            System.err.println(e);
+        }
         Files.writeString(fileName,entry);
         System.out.println("Pass Saved");
     }

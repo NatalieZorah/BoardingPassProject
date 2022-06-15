@@ -1,3 +1,3 @@
 interface TicketPriceCalculator {
-    public double calculateTicketPrice(BoardingPass bp);
+    double calculateTicketPrice(BoardingPass bp);
 }

@@ -45,7 +45,6 @@ public class PassUI {
 
         writer.flush();
         writer.println(output);
-        //System.out.println(output);
     }
 
     public static void ConsolePersonOut(String name,String email,String phone,String gender,int age) {
