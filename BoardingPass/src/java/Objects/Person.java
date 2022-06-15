@@ -1,3 +1,5 @@
+package Objects;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +12,7 @@ public class Person {
     private String Gender;
     private int Age;
 
-    //constructor for Person class
+    //constructor for Objects.Person class
     public Person(String name, String email, String phone, String gender, int age) {
         this.Name = name;
         this.Email = email;
