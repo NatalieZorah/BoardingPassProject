@@ -28,22 +28,111 @@ public class PassUI {
                         gapChar.repeat(13),
                         gapChar.repeat(12),
                         barCharV, "\n");
+                output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
                 break;
-            case "Pass":
+            case "Flight":
                 output = String.format("%s%s%sFlight Information%s%s%s", output, barCharV,
                         gapChar.repeat(15),
                         gapChar.repeat(16),
                         barCharV, "\n");
+                output = String.format("%s%s%s%s", output, barCharV, gapChar.repeat(49), barCharV);
                 break;
             case "Person":
                 output = String.format("%s%s%sPassenger Information%s%s%s", output, barCharV,
                         gapChar.repeat(14),
                         gapChar.repeat(14),
                         barCharV, "\n");
+                output = String.format("%s%s%s%s", output, barCharV, gapChar.repeat(49), barCharV);
                 break;
         }
 
+        writer.flush();
+        writer.println(output);
+    }
+
+    public static void ConsoleQuestionLine(String which,int question) {
+        String output = "";
+        String str = "";
+
+        switch (which) {
+            case ("Person") :
+                ConsoleMenuHeader("Person");
+                switch (question) {
+                    case (1) :
+                        str = str + "Please enter the passenger's Full Name"; //name
+                        break;
+                    case (2) :
+                        str = str + "Enter the passenger's Gender"; //gender
+                        break;
+                    case (3) :
+                        str = str + "Enter the passenger's Age"; //age
+                        break;
+                    case (4) :
+                        str = str + "Enter the passenger's Email Address"; //email
+                        break;
+                    case (5) :
+                        str = str + "Enter the passenger's Phone Number"; //phone
+                        break;
+                }
+                break;
+            case ("Flight") :
+                ConsoleMenuHeader("Flight");
+                switch (question) {
+                    case (1) :
+                        str = str + "Please enter the Flight's Origin Point"; //origin
+                        break;
+                    case (2) :
+                        str = str + "Enter the Flight's Destination Point"; //destination
+                        break;
+                    case (3) :
+                        str = str + "Estimated DEPARTURE time for the Flight"; //arrival time
+                        break;
+                    case (4) :
+                        str = str + "Estimated ARRIVAL time for the Flight"; //departure time
+                        break;
+                }
+                break;
+        }
+
+        int spacel = (int) Math.floor((49-str.length())/2);
+        int spacer = (int) Math.ceil((50-str.length())/2);
+        output = String.format("%s%s%s%s%s%s%s", output, barCharV,
+                gapChar.repeat(spacel),
+                str,
+                gapChar.repeat(spacer),
+                barCharV, "\n");
         output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
+
+        writer.flush();
+        writer.println(output);
+    }
+
+
+    public static void ConsoleErrorOut(String what) {
+        String output = "";
+        String str = "";
+
+        switch (what) {
+            case ("Age") :
+                str = str + "That's not a valid age. Please input a number.";
+                break;
+        }
+
+        int spacel = (int) Math.floor((49-str.length())/2);
+        int spacer = (int) Math.ceil((50-str.length())/2);
+//        output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
+//        output = String.format("%s%s%sGenspark Airlines%s%s%s",output,barCharV,gapChar.repeat(16),gapChar.repeat(16),barCharV,"\n");
+//        output = String.format("%s%s%s%s%s", output, barCharV, gapChar.repeat(49), barCharV,"\n");
+        output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
+        output = String.format("%s%s%s%s%s%s%s", output, barCharV,
+                gapChar.repeat(spacel),
+                str,
+                gapChar.repeat(spacer),
+                barCharV, "\n");
+        output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
+
+        writer.flush();
+        writer.println(output);
     }
 
     public static void ConsolePassOut(BoardingPass pass) {

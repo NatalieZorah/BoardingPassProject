@@ -7,13 +7,13 @@ import java.nio.file.Path;
 
 public class Person {
     private final String Name;
-    private final String Email;
-    private String Phone;
     private String Gender;
     private int Age;
+    private final String Email;
+    private String Phone;
 
     //constructor for Objects.Person class
-    public Person(String name, String email, String phone, String gender, int age) {
+    public Person(String name, String gender, int age, String email, String phone) {
         this.Name = name;
         this.Email = email;
         this.Phone = phone;
