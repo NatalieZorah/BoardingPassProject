@@ -108,28 +108,18 @@ public class PassUI {
     }
 
 
-    public static void ConsoleErrorOut(String what) {
+    public static void ConsoleErrorOut(String str) {
         String output = "";
-        String str = "";
-
-        switch (what) {
-            case ("Age") :
-                str = str + "That's not a valid age. Please input a number.";
-                break;
-        }
 
         int spacel = (int) Math.floor((49-str.length())/2);
         int spacer = (int) Math.ceil((50-str.length())/2);
-//        output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
-//        output = String.format("%s%s%sGenspark Airlines%s%s%s",output,barCharV,gapChar.repeat(16),gapChar.repeat(16),barCharV,"\n");
-//        output = String.format("%s%s%s%s%s", output, barCharV, gapChar.repeat(49), barCharV,"\n");
         output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
         output = String.format("%s%s%s%s%s%s%s", output, barCharV,
                 gapChar.repeat(spacel),
                 str,
                 gapChar.repeat(spacer),
                 barCharV, "\n");
-        output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
+        output = String.format("%s{||}%s{||}",output,barCharH.repeat(49));
 
         writer.flush();
         writer.println(output);
