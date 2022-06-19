@@ -9,13 +9,15 @@ import ConsoleUI.PassUI;
 
 public class Main {
     static Scanner scan = new Scanner(System.in);
+    static boolean gotPerson = false;
+    static boolean gotFlight = false;
 
     private static void MainMenu() {
         boolean run = true;
 
         while (run) {
             PassUI.ConsoleMenuHeader("Main");
-            String input = scan.nextLine().toLowerCase();
+            String input = UserInput.getMenu().toLowerCase();
             switch (input) {
                 case ("person") :
                     PersonMenu();
@@ -25,58 +27,54 @@ public class Main {
                     FlightMenu();
                     run = false;
                     break;
-                default :
-                    System.out.println("Sorry, but that's not a valid option...\nTry again.");
-                    break;
             }
         }
     }
 
     private static void PersonMenu() {
-        boolean run = true;
-        boolean r = true;
+        PassUI.ConsoleQuestionLine("Person",1);
+        String name = UserInput.getName();
 
-        while (run) {
-            PassUI.ConsoleQuestionLine("Person",1);
-                String name = scan.nextLine();
+        PassUI.ConsoleQuestionLine("Person",2);
+        String gender = UserInput.getGender();
 
-            PassUI.ConsoleQuestionLine("Person",2);
-                String gender = scan.nextLine();
+        PassUI.ConsoleQuestionLine("Person",3);
+        int age = UserInput.getAge();
 
-            PassUI.ConsoleQuestionLine("Person",3);
-                r = true;
-                while (r) {
-                    String input = scan.nextLine();
-                    try {
-                        int age = Integer.parseInt(input);
-                        r = false;
-                    } catch (NumberFormatException e) {
-                        PassUI.ConsoleErrorOut("Age");
-                    }
-                }
+        PassUI.ConsoleQuestionLine("Person",4);
+        String email = UserInput.getEmail();
 
-            PassUI.ConsoleQuestionLine("Person",4);
-                String email = scan.nextLine();
+        PassUI.ConsoleQuestionLine("Person",5);
+        String phone = UserInput.getPhone();
 
-            PassUI.ConsoleQuestionLine("Person",5);
-                String phone = scan.nextLine();
-
+        gotPerson = true;
+        if (!gotFlight) {
+            FlightMenu();
+        } else {
+            EndMenu();
         }
     }
 
     private static void FlightMenu() {
-        boolean run = true;
+        PassUI.ConsoleQuestionLine("Flight",1);
+        String origin = UserInput.getOrigin();
+        PassUI.ConsoleQuestionLine("Flight",2);
+        String destination = UserInput.getDestination();
+        PassUI.ConsoleQuestionLine("Flight",3);
+        String departure= UserInput.getDepartureTime();
+        PassUI.ConsoleQuestionLine("Flight",4);
+        int flightLenght = UserInput.getFlightLength();
 
-        while (run) {
-            PassUI.ConsoleQuestionLine("Flight",1);
-            String origin = scan.nextLine();
-            PassUI.ConsoleQuestionLine("Flight",2);
-            String destination = scan.nextLine();
-            PassUI.ConsoleQuestionLine("Flight",3);
-            String departure= scan.nextLine();
-            PassUI.ConsoleQuestionLine("Flight",4);
-            String arrival = scan.nextLine();
+        gotFlight = true;
+        if (!gotPerson) {
+            PersonMenu();
+        } else {
+            EndMenu();
         }
+    }
+
+    private static void EndMenu() {
+        System.exit(0);
     }
 
 

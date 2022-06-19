@@ -88,7 +88,7 @@ public class PassUI {
                         str = str + "Estimated DEPARTURE time for the Flight"; //arrival time
                         break;
                     case (4) :
-                        str = str + "Estimated ARRIVAL time for the Flight"; //departure time
+                        str = str + "Estimated length of the flight in minutes"; //departure time
                         break;
                 }
                 break;

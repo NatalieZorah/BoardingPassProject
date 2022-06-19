@@ -22,7 +22,7 @@ public class UserInput {
         switch (what) {
             case ("Name") :
                 // match for only letters and white space
-                Pattern name = Pattern.compile("^[a-zA-Z\\\\s]*$");
+                Pattern name = Pattern.compile("^[a-zA-Z\\s]*$");
                 Matcher nameMatcher = name.matcher(input.trim());
                 if (nameMatcher.matches()) {
                     return true;
@@ -67,7 +67,7 @@ public class UserInput {
 
             case ("Origin") :
                 // match for only letters and white space
-                Pattern origin = Pattern.compile("^[a-zA-Z\\\\s]*$");
+                Pattern origin = Pattern.compile("^[a-zA-Z\\s]*$");
                 Matcher originMatcher = origin.matcher(input.trim());
                 if (originMatcher.matches()) {
                     return true;
@@ -77,7 +77,7 @@ public class UserInput {
 
             case ("Destination") :
                 // match for only letters and white space
-                Pattern destination = Pattern.compile("^[a-zA-Z\\\\s]*$");
+                Pattern destination = Pattern.compile("^[a-zA-Z\\s]*$");
                 Matcher destinationMatcher = destination.matcher(input.trim());
                 if (destinationMatcher.matches()) {
                     return true;
@@ -87,12 +87,22 @@ public class UserInput {
 
             case ("DepartureTime") :
                 // match for only 24 hr time of hh:mm
-                Pattern time = Pattern.compile("^(\\\\d\\\\d:\\\\d\\\\d)$");
+                Pattern time = Pattern.compile("^(\\d\\d:\\d\\d)$");
                 Matcher timeMatcher = time.matcher(input.trim());
                 if (timeMatcher.matches()) {
                     return true;
                 } else {
                     throw new InvalidInputException("Invalid Time Format. Expected hh:mm in 24hr.");
+                }
+
+            case ("Menu") :
+                // match for only letters and white space
+                Pattern menu = Pattern.compile("^[a-zA-Z\\s]*$");
+                Matcher menuMatcher = menu.matcher(input.trim());
+                if (menuMatcher.matches()) {
+                    return true;
+                } else {
+                    throw new InvalidInputException("Not a valid menu option. Try again.");
                 }
 
             default :
@@ -114,7 +124,7 @@ public class UserInput {
     }
 
     public static String getGender() {
-        String output = scan.nextLine();
+        String output = scan.nextLine().toLowerCase();
         try {
             if (isValidInput("Gender",output)) {
                 return output;
@@ -228,6 +238,19 @@ public class UserInput {
                 PassUI.ConsoleErrorOut("Please enter a number between 0-130.");
                 scan.next();
             }
+        }
+        return output;
+    }
+
+    public static String getMenu() {
+        String output = scan.nextLine();
+        try {
+            if (isValidInput("Menu",output)) {
+                return output;
+            }
+        } catch (InvalidInputException e) {
+            PassUI.ConsoleErrorOut(e.getMessage());
+            output = scan.nextLine();
         }
         return output;
     }
