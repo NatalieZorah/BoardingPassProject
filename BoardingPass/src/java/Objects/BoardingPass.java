@@ -24,6 +24,18 @@ public class BoardingPass {
     private static String originName;
     private static String destinationName;
 
+    /* base ticket price and price per each additional mile in USD */
+    public static final int USD_BASE_PRICE = 50;
+    public static final double USD_PRICE_PER_KM = 0.12;
+    public static final double CHILD_DISCOUNT = 0.5;
+    public static final int CHILD_MAX_AGE = 12;
+    public static final double SENIOR_DISCOUNT = 0.4;
+    public static final int SENIOR_MIN_AGE = 60;
+    public static final double FEMALE_DISCOUNT = 0.75;
+
+    //Had to change this locally to avoid file not found exception
+    //public static final String WORLD_AIRPORTS_CSV = "src/resources/world-airports.csv";
+    public static final String WORLD_AIRPORTS_CSV = "BoardingPass/src/resources/world-airports.csv";
 
     //constructor for the boarding pass object
     public BoardingPass(String passengerName, String origin, String destination, String departureTime, double ticketPrice) {
@@ -49,23 +61,20 @@ public class BoardingPass {
         }
         TicketPrice = ticketPrice;
     }
-
-
     public static double generateTicketPrice(int age,String gender,int distance) {
         // the average cost of a plane ticket in US Dollars is roughly
         // $50 + cost per mile. Here we are using kilometers but the
         // principal is the same. The lowest average cost globally
         // per kilometer of flight is roughly 10-13 cents per km
-        int seed = 50;
-        double output = seed + (distance * 0.12);
-            if (age <= 12) {
-                output = output * 0.5;
-            } else if (age >= 60) {
-                output = output * 0.4;
+        double output = USD_BASE_PRICE + (distance * USD_PRICE_PER_KM);
+            if (age <= CHILD_MAX_AGE) {
+                output = output * CHILD_DISCOUNT;
+            } else if (age >= SENIOR_MIN_AGE) {
+                output = output * SENIOR_DISCOUNT;
             }
 
             if (gender.toLowerCase().charAt(0) == 'f') {
-                output = output * 0.75;
+                output = output * FEMALE_DISCOUNT;
             }
         return Math.round(output * 100) / 100.0;
     }
@@ -116,8 +125,8 @@ public class BoardingPass {
 
     public static int generateDistance(String origin,String destination) throws IOException {
         int output = 0;
-        String fileName = "src/resources/world-airports.csv";
-        Path path = Paths.get(fileName);
+
+        Path path = Paths.get(WORLD_AIRPORTS_CSV);
         ArrayList<String> allAirports = (ArrayList<String>) Files.readAllLines(path);
         double latOrigin = 0;
         double longOrigin = 0;
