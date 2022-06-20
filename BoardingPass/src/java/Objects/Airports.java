@@ -2,34 +2,44 @@ package Objects;
 
 public class Airports {
     private final String Name;
-    private final double Lat;
-    private final double Long;
-    private final String Continent;
     private final String Country;
     private final String City;
     private final String Code;
+    private final double Latitude;
+    private final double Longitude;
 
-    public Airports(String name, double lat, double aLong, String continent, String country, String city, String code) {
+    public Airports(String name, String city, String country, String code,double lat, double aLong) {
         Name = name;
-        Lat = lat;
-        Long = aLong;
-        Continent = continent;
-        Country = country;
         City = city;
+        Country = country;
         Code = code;
+        Latitude = lat;
+        Longitude = aLong;
     }
 
     public String getName() {return Name;}
 
-    public double getLat() {return Lat;}
+    public double getLatitude() {return Latitude;}
 
-    public double getLong() {return Long;}
+    public double getLongitude() {return Longitude;}
 
-    public String getContinent() {return Continent;}
 
     public String getCountry() {return Country;}
 
     public String getCity() {return City;}
 
     public String getCode() {return Code;}
+
+
+    @Override
+    public String toString() {
+        return String.format("%s, %s, %s, %s, %s, %s",
+                Name,
+                City,
+                Country,
+                Code,
+                Latitude,
+                Longitude
+                );
+    }
 }

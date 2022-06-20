@@ -1,13 +1,13 @@
 package Objects;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -18,8 +18,11 @@ public class BoardingPass {
     private final String Origin;
     private final String Destination;
     private final String ArrivalTime;
+    private final String ArrivalDate;
     private final String DepartureTime;
     private final double TicketPrice;
+    private static String originName;
+    private static String destinationName;
 
 
     //constructor for the boarding pass object
@@ -31,11 +34,16 @@ public class BoardingPass {
         }
         PassengerName = passengerName;
         Date = java.time.LocalDate.now();
-        Origin = origin;
-        Destination = destination;
+        Origin = originName;
+        Destination = destinationName;
         DepartureTime = departureTime;
         try {
-            ArrivalTime = generateArrivalTime(departureTime,generateDistance(origin,destination));
+            ArrivalTime = generateArrivalTime("Time",departureTime,generateDistance(origin,destination));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            ArrivalDate = generateArrivalTime("Date",departureTime,generateDistance(origin,destination));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -43,7 +51,7 @@ public class BoardingPass {
     }
 
 
-    private double generateTicketPrice(int age,String gender,int distance) {
+    public static double generateTicketPrice(int age,String gender,int distance) {
         // the average cost of a plane ticket in US Dollars is roughly
         // $50 + cost per mile. Here we are using kilometers but the
         // principal is the same. The lowest average cost globally
@@ -62,7 +70,8 @@ public class BoardingPass {
         return Math.round(output * 100) / 100.0;
     }
 
-    private String generateArrivalTime(String departureTime,int distance) {
+    private String generateArrivalTime(String which,String departureTime,int distance) {
+        String output = "";
         LocalDate date = java.time.LocalDate.now();
         String depart = date + " " + departureTime;
         // average flight time is 12.5-15.5 km/min
@@ -71,7 +80,17 @@ public class BoardingPass {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime Depart = LocalDateTime.parse(depart,formatter);
         LocalDateTime Arrive = Depart.plusMinutes(flightTime);
-        return Arrive.format(formatter);
+        switch (which) {
+            case ("Time") :
+                DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
+                output += Arrive.format(timeFormat);
+                break;
+            case ("Date") :
+                DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                output += Arrive.format(dateFormat);
+                break;
+        }
+        return output;
     }
 
     private String generatePassNumber() throws IOException {
@@ -89,15 +108,15 @@ public class BoardingPass {
         }
         String newPassNumber;
         do {
-            newPassNumber = getAlphaNumericString(32);
+            newPassNumber = getAlphaNumericString(26);
         }
         while (allPassNumbers.contains(newPassNumber));
         return newPassNumber;
     }
 
-    private int generateDistance(String origin,String destination) throws IOException {
+    public static int generateDistance(String origin,String destination) throws IOException {
         int output = 0;
-        String fileName = "resources/world-airports.csv";
+        String fileName = "src/resources/world-airports.csv";
         Path path = Paths.get(fileName);
         ArrayList<String> allAirports = (ArrayList<String>) Files.readAllLines(path);
         double latOrigin = 0;
@@ -105,25 +124,38 @@ public class BoardingPass {
         double latDestination = 0;
         double longDestination = 0;
         for (String currentAirport:allAirports) {
-            // 19 commas to separate 3,4,5,,7,8,13,16 are stored values
-            String[] airport = currentAirport.split(",",19);
-            Airports Airport = new Airports(airport[3], // airport name
-                    Double.parseDouble(airport[4]), // latitude
-                    Double.parseDouble(airport[5]), // longitude
-                    airport[7], // continent
-                    airport[8], // country
-                    airport[13], // municipality
-                    airport[16]); // iata code
-            if (Airport.getName().equalsIgnoreCase(origin) ||
-                    Airport.getCity().equalsIgnoreCase(origin) ||
-                    Airport.getCode().equalsIgnoreCase(origin)) {
-                latOrigin = Airport.getLat();
-                longOrigin = Airport.getLong();
-            } else if (Airport.getName().equalsIgnoreCase(destination) ||
-                    Airport.getCity().equalsIgnoreCase(destination) ||
-                    Airport.getCode().equalsIgnoreCase(destination)) {
-                latDestination = Airport.getLat();
-                longDestination = Airport.getLong();
+            if (!currentAirport.contains("id,ident,type")) {
+                // 23 commas to separate 3,4,5,,7,8,13,16 are stored values
+                String regex = ",(?=([^\"]*\"[^\"]*\")*(?![^\"]*\"))";
+                String[] airport = currentAirport.split(regex, 23);
+                Airports Airport = new Airports(airport[1], // airport name
+                        airport[2], // city
+                        airport[3], // country
+                        airport[4], // code
+                        Double.parseDouble(airport[6]), // latitude
+                        Double.parseDouble(airport[7]) // longitude
+                );
+                if (Airport.getName().equalsIgnoreCase(origin) ||
+                        Airport.getCity().equalsIgnoreCase(origin) ||
+                        airport[12].contains(origin.replace(' ','_')) ||
+                        Airport.getCity().contains(origin)) {
+                    latOrigin = Airport.getLatitude();
+                    longOrigin = Airport.getLongitude();
+                    originName = String.format("%s: %s (%s)",
+                            Airport.getCity(),
+                            Airport.getCountry(),
+                            Airport.getCode());
+                } else if (Airport.getName().equalsIgnoreCase(destination) ||
+                        Airport.getCity().equalsIgnoreCase(destination) ||
+                        airport[12].contains(destination.replace(' ','_')) ||
+                        Airport.getCity().contains(destination)) {
+                    latDestination = Airport.getLatitude();
+                    longDestination = Airport.getLongitude();
+                    destinationName = String.format("%s: %s (%s)",
+                            Airport.getCity(),
+                            Airport.getCountry(),
+                            Airport.getCode());
+                }
             }
         }
         output = (int) Math.round(flightDistance(latOrigin,latDestination,longOrigin,longDestination));
@@ -168,6 +200,8 @@ public class BoardingPass {
 
     public String getArrivalTime() {return ArrivalTime;}
 
+    public String getArrivalDate() {return ArrivalDate;}
+
     public String getDepartureTime() {return DepartureTime;}
 
     public double getTicketPrice() {return TicketPrice;}
@@ -207,14 +241,16 @@ public class BoardingPass {
             if (f.createNewFile()) {
                 System.out.println("New File Created : " + f.getName());
             }else {
-                System.out.println("File Already Exists");
+                FileWriter writer = new FileWriter(fileName, true);
+                writer.write("\n" + entry);
+                writer.flush();
+                writer.close();
+                System.out.println("Pass Saved");
             }
         }
         catch (Exception e) {
             System.err.println(e);
         }
-        Files.writeString(path,entry);
-        System.out.println("Pass Saved");
     }
 
 

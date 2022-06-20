@@ -1,6 +1,5 @@
 import ConsoleUI.PassUI;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.*;
 
@@ -18,6 +17,7 @@ public class UserInput {
         if (input.isBlank()) {
             throw new InvalidInputException("Your input is blank, try again.");
         }
+        char c = input.trim().toLowerCase().charAt(0);
 
         switch (what) {
             case ("Name") :
@@ -32,10 +32,25 @@ public class UserInput {
 
             case ("Gender") :
                 // checks for male, female, enby and non-binary
-                if (input.trim().charAt(1) == 'm' || input.trim().charAt(1) == 'f' || input.trim().charAt(1) == 'n' || input.trim().charAt(1) == 'e') {
+                if (c == 'm' || c == 'f' || c == 'n' || c == 'e') {
                     return true;
                 } else {
                     throw new InvalidInputException("Unrecognized gender option. Try Again");
+                }
+
+            case ("Age") :
+                // match for only numbers between 0 and 130
+                Pattern age = Pattern.compile("^(\\d+)$");
+                Matcher ageMatcher = age.matcher(input.trim());
+                if (ageMatcher.matches()) {
+                    int test = Integer.parseInt(input.trim());
+                    if (test >= 0 && test <= 130) {
+                        return true;
+                    } else {
+                        throw new InvalidInputException("Please enter a number between 0-130.");
+                    }
+                } else {
+                    throw new InvalidInputException("Please enter a NUMBER between 0-130.");
                 }
 
             case ("Email") :
@@ -99,10 +114,19 @@ public class UserInput {
                 // match for only letters and white space
                 Pattern menu = Pattern.compile("^[a-zA-Z\\s]*$");
                 Matcher menuMatcher = menu.matcher(input.trim());
-                if (menuMatcher.matches() && (input.trim().equals("Person") || input.trim().equals("Flight"))) {
+                if (menuMatcher.matches() && (input.trim().equalsIgnoreCase("person") ||
+                        input.trim().equalsIgnoreCase("flight"))) {
                     return true;
                 } else {
                     throw new InvalidInputException("Not a valid menu option. Try again.");
+                }
+
+            case ("Y/N") :
+                // match for only yes or no
+                if (c == 'y' || c == 'n') {
+                    return true;
+                } else {
+                    throw new InvalidInputException("Please answer \"Yes\" or \"No\".");
                 }
 
             default :
@@ -110,147 +134,15 @@ public class UserInput {
         }
     }
 
-    public static String getName() {
+    public static String getUserInput(String which) {
         String output = scan.nextLine();
         try {
-            if (isValidInput("Name",output)) {
+            if (isValidInput(which,output)) {
                 return output;
             }
         } catch (InvalidInputException e) {
             PassUI.ConsoleErrorOut(e.getMessage());
-            output = scan.nextLine();
-        }
-        return output;
-    }
-
-    public static String getGender() {
-        String output = scan.nextLine().toLowerCase();
-        try {
-            if (isValidInput("Gender",output)) {
-                return output;
-            }
-        } catch (InvalidInputException e) {
-            PassUI.ConsoleErrorOut(e.getMessage());
-            output = scan.nextLine();
-        }
-        return output;
-    }
-
-    public static int getAge() {
-        int output = 0;
-        boolean run = true;
-        while (run) {
-            try {
-                output = scan.nextInt();
-                if (output >= 0 && output <= 130) {
-                    run = false;
-                } else {
-                    PassUI.ConsoleErrorOut("Number out of range.");
-                    PassUI.ConsoleErrorOut("Please enter a number between 0-130.");
-                    output = scan.nextInt();
-                }
-            } catch (InputMismatchException e) {
-                PassUI.ConsoleErrorOut("Please enter a number between 0-130.");
-                scan.next();
-            }
-        }
-        return output;
-    }
-
-    public static String getEmail() {
-        String output = scan.nextLine();
-        try {
-            if (isValidInput("Email",output)) {
-                return output;
-            }
-        } catch (InvalidInputException e) {
-            PassUI.ConsoleErrorOut(e.getMessage());
-            output = scan.nextLine();
-        }
-        return output;
-    }
-
-    public static String getPhone() {
-        String output = scan.nextLine();
-        try {
-            if (isValidInput("Phone",output)) {
-                return output;
-            }
-        } catch (InvalidInputException e) {
-            PassUI.ConsoleErrorOut(e.getMessage());
-            output = scan.nextLine();
-        }
-        return output;
-    }
-
-    public static String getOrigin() {
-        String output = scan.nextLine();
-        try {
-            if (isValidInput("Origin",output)) {
-                return output;
-            }
-        } catch (InvalidInputException e) {
-            PassUI.ConsoleErrorOut(e.getMessage());
-            output = scan.nextLine();
-        }
-        return output;
-    }
-
-    public static String getDestination() {
-        String output = scan.nextLine();
-        try {
-            if (isValidInput("Destination",output)) {
-                return output;
-            }
-        } catch (InvalidInputException e) {
-            PassUI.ConsoleErrorOut(e.getMessage());
-            output = scan.nextLine();
-        }
-        return output;
-    }
-
-    public static String getDepartureTime() {
-        String output = scan.nextLine();
-        try {
-            if (isValidInput("DepartureTime",output)) {
-                return output;
-            }
-        } catch (InvalidInputException e) {
-            PassUI.ConsoleErrorOut(e.getMessage());
-            output = scan.nextLine();
-        }
-        return output;
-    }
-
-    public static int getFlightLength() {
-        int output = 0;
-        boolean run = true;
-        while (run) {
-            try {
-                output = scan.nextInt();
-                if (output >= 0) {
-                    run = false;
-                } else {
-                    PassUI.ConsoleErrorOut("Please enter a positive number");
-                    output = scan.nextInt();
-                }
-            } catch (InputMismatchException e) {
-                PassUI.ConsoleErrorOut("Please enter a number between 0-130.");
-                scan.next();
-            }
-        }
-        return output;
-    }
-
-    public static String getMenu() {
-        String output = scan.nextLine();
-        try {
-            if (isValidInput("Menu",output)) {
-                return output;
-            }
-        } catch (InvalidInputException e) {
-            PassUI.ConsoleErrorOut(e.getMessage());
-            output = scan.nextLine();
+            scan.next();
         }
         return output;
     }

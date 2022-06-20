@@ -19,7 +19,7 @@ public class PassUI {
         output = String.format("%s%s%sGenspark Airlines%s%s%s",output,barCharV,gapChar.repeat(16),gapChar.repeat(16),barCharV,"\n");
 
         switch (header) {
-            case "Main":
+            case ("Main") :
                 output = String.format("%s%s%sMain Menu%s%s%s", output, barCharV,
                         gapChar.repeat(20),
                         gapChar.repeat(20),
@@ -33,19 +33,54 @@ public class PassUI {
                         barCharV, "\n");
                 output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
                 break;
-            case "Flight":
+
+            case ("Flight") :
                 output = String.format("%s%s%sFlight Information%s%s%s", output, barCharV,
                         gapChar.repeat(15),
                         gapChar.repeat(16),
                         barCharV, "\n");
                 output = String.format("%s%s%s%s", output, barCharV, gapChar.repeat(49), barCharV);
                 break;
-            case "Person":
+
+            case ("Person") :
                 output = String.format("%s%s%sPassenger Information%s%s%s", output, barCharV,
                         gapChar.repeat(14),
                         gapChar.repeat(14),
                         barCharV, "\n");
                 output = String.format("%s%s%s%s", output, barCharV, gapChar.repeat(49), barCharV);
+                break;
+
+            case ("Save") :
+                output = String.format("%s%s Would you like to SAVE the above Boarding Pass? %s%s", output, barCharV,barCharV, "\n");
+                output = String.format("%s%s%sYes%sNo%s%s%s", output, barCharV,
+                        gapChar.repeat(15),
+                        gapChar.repeat(14),
+                        gapChar.repeat(15),
+                        barCharV, "\n");
+                output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
+                break;
+
+            case ("Re-Submit") :
+                output = String.format("%s%s%sPlease choose which information to re-enter:%s%s%s", output, barCharV,
+                        gapChar.repeat(3),
+                        gapChar.repeat(2),
+                        barCharV, "\n");
+                output = String.format("%s%s%sPerson%sFlight%s%s%s", output, barCharV,
+                        gapChar.repeat(12),
+                        gapChar.repeat(13),
+                        gapChar.repeat(12),
+                        barCharV, "\n");
+                output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
+                break;
+
+            case ("Again") :
+                output = String.format("%s%s Would you like to start on a new Boarding Pass? %s%s", output, barCharV,barCharV, "\n");
+                output = String.format("%s%s%sYes%sNo%s%s%s", output, barCharV,
+                        gapChar.repeat(15),
+                        gapChar.repeat(14),
+                        gapChar.repeat(15),
+                        barCharV, "\n");
+                output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
                 break;
         }
 
@@ -90,9 +125,6 @@ public class PassUI {
                     case (3) :
                         str = str + "Estimated DEPARTURE time for the Flight"; //arrival time
                         break;
-                    case (4) :
-                        str = str + "Estimated length of the flight in minutes"; //departure time
-                        break;
                 }
                 break;
         }
@@ -130,13 +162,16 @@ public class PassUI {
 
     public static void ConsolePassOut(BoardingPass pass) {
         String output = "";
-        String arriveDate = "06/15/2022";
 
         output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
         output = String.format("%s%s%sGenspark Airlines%s%s%s",output,barCharV,gapChar.repeat(16),gapChar.repeat(16),barCharV,"\n");
         output = String.format("%s%sBoarding Pass Number:%s%s%s%s",output,barCharV,
                 gapChar.repeat(28-pass.getPassNumber().length()),
                 ANSI_PURPLE + pass.getPassNumber() + ANSI_RESET,
+                barCharV,"\n");
+        output = String.format("%s%sTicket Price:%s$%s%s%s",output,barCharV,
+                gapChar.repeat(35-String.valueOf(pass.getTicketPrice()).length()),
+                ANSI_PURPLE + pass.getTicketPrice() + ANSI_RESET,
                 barCharV,"\n");
         output = String.format("%s%s%s%s%s",output,barCharV,gapChar.repeat(49),barCharV,"\n");
         output = String.format("%s%sDeparture Information%s%s%s",output,barCharV,gapChar.repeat(28),barCharV,"\n");
@@ -147,18 +182,18 @@ public class PassUI {
                 barCharV,"\n");
         output = String.format("%s%sLocation: %s%s%s%s",output,barCharV,
                 gapChar.repeat(39-pass.getOrigin().length()),
-                ANSI_PURPLE + pass.getOrigin() + ANSI_RESET,
+                ANSI_PURPLE + pass.getOrigin().replace(':',',') + ANSI_RESET,
                 barCharV,"\n");
         output = String.format("%s%s%s%s%s",output,barCharV,gapChar.repeat(49),barCharV,"\n");
         output = String.format("%s%sArrival Information%s%s%s",output,barCharV,gapChar.repeat(30),barCharV,"\n");
         output = String.format("%s%sDate: %s%sTime: %s%s%s",output,barCharV,
-                ANSI_PURPLE + arriveDate + ANSI_RESET,
+                ANSI_PURPLE + pass.getArrivalDate() + ANSI_RESET,
                 gapChar.repeat(22),
                 ANSI_PURPLE + pass.getArrivalTime() + ANSI_RESET,
                 barCharV,"\n");
         output = String.format("%s%sLocation: %s%s%s%s",output,barCharV,
                 gapChar.repeat(39-pass.getDestination().length()),
-                ANSI_PURPLE + pass.getDestination() + ANSI_RESET,
+                ANSI_PURPLE + pass.getDestination().replace(':',',') + ANSI_RESET,
                 barCharV,"\n");
         output = String.format("%s{||}%s{||}",output,barCharH.repeat(49));
 
@@ -172,15 +207,15 @@ public class PassUI {
         output = String.format("%s%s%sPassenger Information%s%s%s",output,barCharV,gapChar.repeat(14),gapChar.repeat(14),barCharV,"\n");
         output = String.format("%s%sName: %s%sGender: %s%s%s%s",output,barCharV,
                 ANSI_PURPLE + who.getName() + ANSI_RESET,
-                gapChar.repeat(28-who.getName().length()),
+                gapChar.repeat(24-who.getName().length()),
                 ANSI_PURPLE + who.getGender() + ANSI_RESET,
-                gapChar.repeat(7-who.getGender().length()),
+                gapChar.repeat(11-who.getGender().length()),
                 barCharV,"\n");
-        output = String.format("%s%sAge: %s%sPhone: %s%s%s%s",output,barCharV,
+        output = String.format("%s%sAge: %s%sPhone:  %s%s%s%s",output,barCharV,
                 ANSI_PURPLE + who.getAge() + ANSI_RESET,
-                gapChar.repeat(23-String.valueOf(who.getAge()).length()),
+                gapChar.repeat(25-String.valueOf(who.getAge()).length()),
                 ANSI_PURPLE + who.getPhone() + ANSI_RESET,
-                gapChar.repeat(14-who.getPhone().length()),
+                gapChar.repeat(11-who.getPhone().length()),
                 barCharV,"\n");
         output = String.format("%s%sEmail: %s%s%s%s",output,barCharV,
                 gapChar.repeat(42-who.getEmail().length()),
