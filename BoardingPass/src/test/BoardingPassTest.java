@@ -29,7 +29,7 @@ public class BoardingPassTest {
     /* initial test, testing constructor, 'getter' methods */
     @Test
     public void getTestBPFields() {
-        BoardingPass bp = new BoardingPass("5", "today", "seoul", "busan", "1700", "1400");
+        BoardingPass bp = new BoardingPass("Natalie", "busan","london", "14:00",145);
         assertEquals(bp.getPassNumber(),"5");
         assertEquals(bp.getDate(),"today");
         assertEquals(bp.getOrigin(),"seoul");

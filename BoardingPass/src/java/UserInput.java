@@ -99,7 +99,7 @@ public class UserInput {
                 // match for only letters and white space
                 Pattern menu = Pattern.compile("^[a-zA-Z\\s]*$");
                 Matcher menuMatcher = menu.matcher(input.trim());
-                if (menuMatcher.matches()) {
+                if (menuMatcher.matches() && (input.trim().equals("Person") || input.trim().equals("Flight"))) {
                     return true;
                 } else {
                     throw new InvalidInputException("Not a valid menu option. Try again.");

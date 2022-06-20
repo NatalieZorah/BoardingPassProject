@@ -5,6 +5,9 @@ import Objects.BoardingPass;
 import Objects.Person;
 
 public class PassUI {
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_PURPLE = "\u001B[35m";
     private static final String barCharH = "=";
     private static final String barCharV = " || ";
     private static final String gapChar = " ";
@@ -116,7 +119,7 @@ public class PassUI {
         output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
         output = String.format("%s%s%s%s%s%s%s", output, barCharV,
                 gapChar.repeat(spacel),
-                str,
+                ANSI_RED + str + ANSI_RESET,
                 gapChar.repeat(spacer),
                 barCharV, "\n");
         output = String.format("%s{||}%s{||}",output,barCharH.repeat(49));
@@ -133,29 +136,29 @@ public class PassUI {
         output = String.format("%s%s%sGenspark Airlines%s%s%s",output,barCharV,gapChar.repeat(16),gapChar.repeat(16),barCharV,"\n");
         output = String.format("%s%sBoarding Pass Number:%s%s%s%s",output,barCharV,
                 gapChar.repeat(28-pass.getPassNumber().length()),
-                pass.getPassNumber(),
+                ANSI_PURPLE + pass.getPassNumber() + ANSI_RESET,
                 barCharV,"\n");
         output = String.format("%s%s%s%s%s",output,barCharV,gapChar.repeat(49),barCharV,"\n");
         output = String.format("%s%sDeparture Information%s%s%s",output,barCharV,gapChar.repeat(28),barCharV,"\n");
         output = String.format("%s%sDate: %s%sTime: %s%s%s",output,barCharV,
-                pass.getDate(),
+                ANSI_PURPLE + pass.getDate() + ANSI_RESET,
                 gapChar.repeat(22),
-                pass.getDepartureTime(),
+                ANSI_PURPLE + pass.getDepartureTime() + ANSI_RESET,
                 barCharV,"\n");
         output = String.format("%s%sLocation: %s%s%s%s",output,barCharV,
                 gapChar.repeat(39-pass.getOrigin().length()),
-                pass.getOrigin(),
+                ANSI_PURPLE + pass.getOrigin() + ANSI_RESET,
                 barCharV,"\n");
         output = String.format("%s%s%s%s%s",output,barCharV,gapChar.repeat(49),barCharV,"\n");
         output = String.format("%s%sArrival Information%s%s%s",output,barCharV,gapChar.repeat(30),barCharV,"\n");
         output = String.format("%s%sDate: %s%sTime: %s%s%s",output,barCharV,
-                arriveDate,
+                ANSI_PURPLE + arriveDate + ANSI_RESET,
                 gapChar.repeat(22),
-                pass.getArrivalTime(),
+                ANSI_PURPLE + pass.getArrivalTime() + ANSI_RESET,
                 barCharV,"\n");
         output = String.format("%s%sLocation: %s%s%s%s",output,barCharV,
                 gapChar.repeat(39-pass.getDestination().length()),
-                pass.getDestination(),
+                ANSI_PURPLE + pass.getDestination() + ANSI_RESET,
                 barCharV,"\n");
         output = String.format("%s{||}%s{||}",output,barCharH.repeat(49));
 
@@ -168,20 +171,20 @@ public class PassUI {
 
         output = String.format("%s%s%sPassenger Information%s%s%s",output,barCharV,gapChar.repeat(14),gapChar.repeat(14),barCharV,"\n");
         output = String.format("%s%sName: %s%sGender: %s%s%s%s",output,barCharV,
-                who.getName(),
+                ANSI_PURPLE + who.getName() + ANSI_RESET,
                 gapChar.repeat(28-who.getName().length()),
-                who.getGender(),
+                ANSI_PURPLE + who.getGender() + ANSI_RESET,
                 gapChar.repeat(7-who.getGender().length()),
                 barCharV,"\n");
         output = String.format("%s%sAge: %s%sPhone: %s%s%s%s",output,barCharV,
-                who.getAge(),
+                ANSI_PURPLE + who.getAge() + ANSI_RESET,
                 gapChar.repeat(23-String.valueOf(who.getAge()).length()),
-                who.getPhone(),
+                ANSI_PURPLE + who.getPhone() + ANSI_RESET,
                 gapChar.repeat(14-who.getPhone().length()),
                 barCharV,"\n");
         output = String.format("%s%sEmail: %s%s%s%s",output,barCharV,
                 gapChar.repeat(42-who.getEmail().length()),
-                who.getEmail(),
+                ANSI_PURPLE + who.getEmail() + ANSI_RESET,
                 barCharV,"\n");
         output = String.format("%s{||}%s{||}%s",output,barCharH.repeat(49),"\n");
 

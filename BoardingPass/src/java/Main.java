@@ -8,9 +8,10 @@ import Objects.Person;
 import ConsoleUI.PassUI;
 
 public class Main {
-    static Scanner scan = new Scanner(System.in);
     static boolean gotPerson = false;
     static boolean gotFlight = false;
+    private static Person newPerson;
+    private static BoardingPass newFlight;
 
     private static void MainMenu() {
         boolean run = true;
@@ -47,6 +48,8 @@ public class Main {
         PassUI.ConsoleQuestionLine("Person",5);
         String phone = UserInput.getPhone();
 
+        BuildPerson(name,gender,age,email,phone);
+
         gotPerson = true;
         if (!gotFlight) {
             FlightMenu();
@@ -65,6 +68,8 @@ public class Main {
         PassUI.ConsoleQuestionLine("Flight",4);
         int flightLenght = UserInput.getFlightLength();
 
+        BuildFlight(origin,destination,departure,flightLenght);
+
         gotFlight = true;
         if (!gotPerson) {
             PersonMenu();
@@ -77,8 +82,16 @@ public class Main {
         System.exit(0);
     }
 
+    private static void BuildPerson(String name,String gender,int age,String email,String phone) {
+
+    }
+
+    private static void BuildFlight(String origin,String destination,String dapartureTime,int length) {
+
+    }
+
 
     public static void main(String[] args) {
-        MainMenu();
+        System.out.println(String.valueOf(java.time.LocalDate.now()));
     }
 }
